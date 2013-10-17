@@ -1,8 +1,14 @@
 /*
  * Borland Real48 in Java
  * 
- * When writing a converter tool for a binary file format, I had problems reading some of the floating point numbers. After a little bit of research I found out that this very special format was used in programs written in Borland Pascal/Delphi. Since I couldn't find any Java class that's able to read this kind of number I wrote it myself.
- * As far as I remember these are basically reverse IEEE floating point numbers of six bytes. (It's been a while since I wrote this. See the PDF file by Richard Biffl for a detailed description of the format.)
+ * When writing a converter tool for a binary file format, I had problems 
+ * reading some of the floating point numbers. After a little bit of research 
+ * I found out that this very special format was used in programs written in 
+ * Borland Pascal/Delphi. Since I couldn't find any Java class that's able to 
+ * read this kind of number I wrote it myself.
+ * As far as I remember these are basically reverse IEEE floating point 
+ * numbers of six bytes. (It's been a while since I wrote this. See the PDF 
+ * file by Richard Biffl for a detailed description of the format.)
  * 
  * References:
  * 
@@ -85,16 +91,14 @@ public class Real48 {
 			return 0.0;
 		}
 
-		// convert exponent (bias for Real48 is 129, bias for IEEE 754-double is
-		// 1023)
+		// convert exponent (bias for Real48 is 129, bias for IEEE 754-double is 1023)
 		exponent += 894;
 
 		long bits = (sign << 63) + (exponent << 52) + (significand << 13);
 
 		double value = Double.longBitsToDouble(bits);
 
-		// since Real48 has only a precision of 11 we need to set all digits >
-		// 11 to zero
+		// since Real48 has only a precision of 11 we need to set all digits > 11 to zero
 		BigDecimal bd = new BigDecimal(value);
 		bd = bd.setScale(11, BigDecimal.ROUND_DOWN);
 
